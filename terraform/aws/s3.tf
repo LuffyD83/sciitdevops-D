@@ -4,7 +4,7 @@ module "s3_bucket" {
   name  = "nume"                  # numele tag-ului ce il atribuim resursei
   owner = "owner"                 # numele owner-ului resursei
 
-  s3_bucket_names = ["mariusb_devops_bucket1"]
+  s3_bucket_names = ["test-devops"]
   acl             = "private"
   force_destroy   = false
 
