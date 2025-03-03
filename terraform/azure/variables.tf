@@ -1,8 +1,8 @@
-variable "location" {
-  description = "Azure region for resources"
-  type        = string
-  default     = "West Europe"
-}
+# variable "location" {
+#   description = "Azure region for resources"
+#   type        = string
+#   default     = "West Europe"
+# }
 
 variable "environment" {
   description = "Environment name"
@@ -16,11 +16,6 @@ variable "project" {
   default     = "devops"
 }
 
-variable "resource_group_location" {
-  default     = "eastus"
-  description = "Location of the resource group."
-}
-
 variable "prefix" {
   type        = string
   default     = "win-vm-iis"
@@ -29,7 +24,7 @@ variable "prefix" {
 
 variable "resource_group_location" {
   type        = string
-  default     = "eastus"
+  default     = "West Europe"
   description = "Location of the resource group."
 }
 
@@ -42,5 +37,5 @@ variable "resource_group_name_prefix" {
 variable "username" {
   type        = string
   description = "The username for the local account that will be created on the new VM."
-  default     = "azureadmin"
+  default     = "devadmin"
 }
