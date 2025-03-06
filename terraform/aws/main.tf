@@ -1,6 +1,4 @@
-provider "aws" {
-  region = var.region
-}
+
 
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
@@ -31,7 +29,7 @@ resource "aws_instance" "web" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
+      #private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
       host        = self.public_ip
     }
 
@@ -46,7 +44,7 @@ resource "aws_instance" "web" {
     connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
+     # private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
       host        = self.public_ip
     }
   }
