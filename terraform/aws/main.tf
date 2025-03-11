@@ -17,37 +17,41 @@ resource "aws_instance" "web" {
   availability_zone      = var.public_subnet_az
   subnet_id              = aws_subnet.public-subnet.id
   vpc_security_group_ids = [aws_security_group.sg.id]
+  key_name               = data.aws_key_pair.key_name
 
   tags = merge(local.common_tags, { Name = "WebServer" })
 
   #user_data = file("python_web_server.sh")
-   # Use the remote-exec provisioner to run the setup script
+  # Use the remote-exec provisioner to run the setup script
   provisioner "file" {
     source      = "python_web_server.sh"
     destination = "/home/ec2-user/python_web_server.sh"
 
     connection {
-      type        = "ssh"
-      user        = "ec2-user"
+      type = "ssh"
+      user = "ec2-user"
       #private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
-      host        = self.public_ip
+      host = self.public_ip
     }
 
   }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo chmod +x /home/ec2-user/python_web_server.sh",
-      "/home/ec2-user/python_web_server.sh"
-    ]
-
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-     # private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
-      host        = self.public_ip
-    }
+  provisioner "local-exec" {
+    command = "sleep 90 && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./aws.pem install_k3s.yml -vv"
   }
+
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo chmod +x /home/ec2-user/python_web_server.sh",
+  #     "/home/ec2-user/python_web_server.sh"
+  #   ]
+
+  #   connection {
+  #     type = "ssh"
+  #     user = "ec2-user"
+  #     # private_key = tls_private_key.private_key.private_key_openssh # Path to your private key
+  #     host = self.public_ip
+  #   }
+ # }
 }
 
 
