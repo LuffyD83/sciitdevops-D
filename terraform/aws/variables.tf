@@ -34,16 +34,6 @@ variable "private_subnet_az" {
   default     = "eu-west-1b"
 }
 
-# variable "owner" {
-#   description = "Owner of the resources"
-#   type        = string
-# }
-
-# variable "name" {
-#   description = "Environment name"
-#   type        = string
-# }
-
 variable "extra_tags" {
   description = "Additional tags to apply to resources"
   type        = map(string)
