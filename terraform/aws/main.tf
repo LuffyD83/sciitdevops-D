@@ -18,8 +18,10 @@ resource "aws_instance" "web" {
   subnet_id              = aws_subnet.public-subnet.id
   vpc_security_group_ids = [aws_security_group.sg.id]
   key_name               = data.aws_key_pair.public_key.key_name
-
-  tags = merge(local.common_tags, { Name = "K3s-VM" })
+  
+  
+  
+    tags = merge(local.common_tags, { Name = "K3s-VM" })
 
   #user_data = file("python_web_server.sh")
   # Use the remote-exec provisioner to run the setup script
@@ -42,6 +44,7 @@ resource "aws_instance" "web" {
 provisioner "local-exec" {
   command = <<EOT
     sleep 90
+    chmod 400 ~/scripts/devops.pem
     ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devops.pem ./scripts/install_k3s.yml -vv
   EOT
 }
