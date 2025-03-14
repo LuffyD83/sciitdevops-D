@@ -35,7 +35,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
 
       # Save instance IPs and create inventory file for Ansible
       - name: Save instance IPs and create inventory
