@@ -42,7 +42,6 @@ resource "aws_instance" "web" {
 provisioner "local-exec" {
   command = <<EOT
     sleep 90
-    ssh-keyscan ${self.public_ip} >> ~/.ssh/known_hosts
     ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devops.pem ./scripts/install_k3s.yml -vv
   EOT
 }
