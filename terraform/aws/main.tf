@@ -44,7 +44,7 @@ resource "aws_instance" "web" {
 provisioner "local-exec" {
   command = <<EOT
     sleep 90
-    chmod 400 ~/scripts/devops.pem
+    chmod 400 /home/runner/work/sciitdevops-D/sciitdevops-D/terraform/aws/scripts/devops.pem
     ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devops.pem ./scripts/install_k3s.yml -vv
   EOT
 }
