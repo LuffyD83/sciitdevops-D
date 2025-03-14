@@ -8,6 +8,10 @@ on:
 jobs:
   provision-ec2:
     runs-on: ubuntu-latest
+    defaults:
+        run:
+          shell: bash
+          working-directory: ./terraform/aws
 
     steps:
       # Checkout repo
