@@ -186,31 +186,30 @@
               helm:
                 values: |
                   controller:
+                    image:
+                      registry: docker.io
+                      repository: cristid9/custom-jenkins
+                      tag: latest
                     serviceType: LoadBalancer
-                    admin.username: "admin"
-                    admin.password: "admin"  # Plain text (not recommended)
+                    admin:
+                      username: "admin"
+                      password: "admin"  # Plain text (not recommended)
                     installPlugins:
                       - git:5.7.0
-                      - kubernetes:1.30.1  # Add this line
-                    # You need to manually set the secret
+                      - kubernetes:1.30.1
+                      - ssh:158.ve2a_e90fb_7319
+                      - ssh-agent:384.ve275343791a_6
+                      - ssh-steps:2.0.79.v1d1b_5f76dda_8
+                  podSecurityContextOverride:
+                    runAsNonRoot: true
+                    runAsUser: 1000
+                    supplementalGroups: [1000]
+
             syncPolicy:
               automated:
                 selfHeal: true
                 prune: true
 
-
-
-
-    # - name: Install required Ansible collections
-    #   ansible.builtin.shell: ansible-galaxy collection install community.kubernetes
-    #   changed_when: false
-
-    - name: Create Prometheus namespace
-      kubernetes.core.k8s:
-        name: monitoring
-        api_version: v1
-        kind: Namespace
-        state: present
 
     - name: Add Prometheus Helm repository
       command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
