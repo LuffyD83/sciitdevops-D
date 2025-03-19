@@ -1,4 +1,4 @@
-name: "Terraform CI/CD"
+name: "AZURE Infra"
 
 on:
   workflow_dispatch: 
@@ -11,18 +11,20 @@ jobs:
     defaults:
         run:
           shell: bash
-          working-directory: ./terraform/aws
+          working-directory: ./terraform/azure
 
     steps:
       # Checkout repo
       - uses: actions/checkout@v3
 
-      # Configure AWS credentials
-      - uses: aws-actions/configure-aws-credentials@v1
+      # Configure AZURE  credentials
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-          aws-region: 'eu-west-1'
+         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+         allow-no-subscriptions: true'
 
       # Terraform Setup
       - name: Setup Terraform
@@ -43,7 +45,7 @@ jobs:
           echo "$INSTANCE_IPS" | jq -r '.[]' > ansible/instance-ips.txt
           echo "[servers]" > ansible/inventory.ini
           while IFS= read -r ip; do
-            echo "$ip ansible_user=ubuntu ansible_ssh_private_key_file=./scripts/devops.pem" >> ansible/inventory.ini
+            echo "$ip ansible_user=ubuntu ansible_ssh_private_key_file=./scripts/devazure.pem" >> ansible/inventory.ini
           done < ansible/instance-ips.txt
 
       # Wait for SSH to be available
@@ -66,15 +68,15 @@ jobs:
       - name: Add SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/devops.pem
-          chmod 400 ~/.ssh/devops.pem
+          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
+          chmod 400 ~/.ssh/devazure.pem
 
       # Test SSH connection
       - name: Test SSH connection
         run: |
           INSTANCE_IP=$(terraform output -json instance_ips | jq -r '.[0]')
           echo "Trying to SSH into $INSTANCE_IP"
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/devops.pem ubuntu@$INSTANCE_IP
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/devazure.pem ubuntu@$INSTANCE_IP
 
       # Install Ansible
       - name: Install Ansible
