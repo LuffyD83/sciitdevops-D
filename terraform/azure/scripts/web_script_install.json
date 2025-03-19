@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/LuffyD83/sciitdevops-D.git'
+        BRANCH = 'main'
+        EC2_HOST = 'aws_instance.web.ip'
+        EC2_USER = 'ubuntu'
+    }
+
+    stages {
+        stage('Checkout from Git') {
+            steps {
+                script {
+                    echo "Cloning the Git repository..."
+                    git branch: BRANCH, url: REPO_URL
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                withCredentials([string(credentialsId: 'ec2-ssh-password', variable: 'SSH_PASS')]) {
+                    script {
+                        echo "Starting Deployment..."
+
+                        // Install sshpass if it's not installed
+                        sh 'if ! command -v sshpass &> /dev/null; then sudo apt-get update && sudo apt-get install -y sshpass; fi'
+
+                        // Deploy code & start the Python server
+                        sh """
+                        sshpass -p '${SSH_PASS}' ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+                            echo "Connected to EC2"
+                            sudo apt-get update
+                            sudo apt-get install -y git python3
+                            git clone ${REPO_URL} || (cd TestPython && git pull)
+                            cd TestPython
+                            nohup python3 -m http.server 8080 &
+                        EOF
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
