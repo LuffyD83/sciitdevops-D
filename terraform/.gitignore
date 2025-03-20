@@ -26,4 +26,4 @@ terraform.lock.hcl
 *.tfstate.*
 
 *.pem
-
+*.pub
