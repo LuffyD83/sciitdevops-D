@@ -24,3 +24,6 @@ terraform.lock.hcl
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+*.pem
+*.pub
