@@ -1,5 +1,5 @@
 ---
-- name: Configure EC2 instance for K3s and deploy ArgoCD
+- name: Configure Azure instance for K3s and deploy ArgoCD
   hosts: all
   become: yes
   gather_facts: yes
