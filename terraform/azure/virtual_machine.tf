@@ -8,7 +8,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
   network_interface_ids = [azurerm_network_interface.my_terraform_nic.id]
   size                  = "Standard_DS1_v2"
   admin_username        = var.username
-  
+
   os_disk {
     name                 = "myOsDisk"
     caching              = "ReadWrite"
@@ -32,21 +32,45 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
   admin_ssh_key {
     username   = var.username
-    public_key = file(".scripts/azure.pem.pub")
+    public_key = file("./scripts/devazure.pem.pub")
   }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.my_storage_account.primary_blob_endpoint
   }
 
+  # provisioner "local-exec" {
+  #   command = <<EOT
+  #   sleep 90
+  #   chmod 400 ./scripts/devazure.pem
+  #   ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${azurerm_public_ip.my_terraform_public_ip.ip_address}, -u azureuser --private-key=./scripts/devazure.pem ./scripts/install_k3s.yml -vv
+
+  # EOT
+  # }
+}
+
+# resource "null_resource" "ansible_playbook" {
+#   depends_on = [azurerm_linux_virtual_machine.my_terraform_vm]
+
+#   provisioner "local-exec" {
+#     command = "sleep 90 && ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${azurerm_public_ip.my_terraform_public_ip.ip_address}, -u ubuntu --private-key=./scripts/devazure.pem ./scripts/install_k3s.yml -vv"
+#   }
+# }
+
+resource "null_resource" "ansible_playbook" {
+  depends_on = [azurerm_linux_virtual_machine.my_terraform_vm]
+
   provisioner "local-exec" {
     command = <<EOT
     sleep 90
-    chmod 400 /home/runner/work/sciitdevazure-D/sciitdevazure-D/terraform/aws/scripts/devazure.pem
-    ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devazure.pem ./scripts/install_k3s.yml -vv
+    chmod 400 ./scripts/devazure.pem
+    ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i ${azurerm_public_ip.my_terraform_public_ip.ip_address}, -u devadmin --private-key=./scripts/devazure.pem ./scripts/install_k3s.yml -vv
+
   EOT
   }
 }
+
+
 
 
 # # Create virtual machine
