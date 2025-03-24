@@ -112,4 +112,4 @@ jobs:
 
       #Run Ansible Playbook
       - name: Run Ansible Playbook
-        run: ansible-playbook -i inventory.ini ./scripts/install_k3s.yml.yaml -vvv
+        run: ansible-playbook -i inventory.ini ./scripts/install_k3s.yml -vvv
