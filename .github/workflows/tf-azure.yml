@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  provision-ec2:
+  provision-az-vm:
     runs-on: ubuntu-latest
     defaults:
         run:
