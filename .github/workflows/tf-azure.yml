@@ -1,7 +1,11 @@
 name: "AZURE Infra"
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
 
 
 
