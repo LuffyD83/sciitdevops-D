@@ -74,7 +74,7 @@ jobs:
 
           # Create inventory.ini
           echo "[servers]" > inventory.ini
-          echo "$IP_LIST ansible_user=devadmin ansible_ssh_private_key_file=./devazure.pem" >> inventory.ini
+          echo "$IP_LIST ansible_user=devadmin ansible_ssh_private_key_file=./scripts/devazure.pem" >> inventory.ini
 
       # # Wait for SSH to be available
       # - name: Wait for SSH to be available
