@@ -1,5 +1,5 @@
 ---
-- name: Configure EC2 instance for K3s
+- name: Configure AZVM instance for K3s
   hosts: all
   become: yes
   gather_facts: yes
