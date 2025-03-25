@@ -42,6 +42,15 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
+          
+#  Add SSH Key from GitHub Secrets
+      - name: Add SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
+          echo "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" > /scripts/devazure.pem.pub
+          chmod 400 ~/.ssh/devazure.pem
+          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
 
       - name: Terraform Init
         run: terraform init
@@ -97,6 +106,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
+          echo "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" > /scripts/devazure.pem.pub
           chmod 400 ~/.ssh/devazure.pem
           echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
 
