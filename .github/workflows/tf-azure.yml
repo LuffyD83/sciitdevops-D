@@ -49,7 +49,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
           echo "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" > ./scripts/devazure.pem.pub
-          chmod 400 ~/.ssh/devazure.pem
+          chmod 600 ~/.ssh/devazure.pem
           echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
 
       - name: Terraform Init
@@ -102,13 +102,13 @@ jobs:
       #     done
 
       #  Add SSH Key from GitHub Secrets
-      - name: Add SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
-          echo "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" > /scripts/devazure.pem.pub
-          chmod 400 ~/.ssh/devazure.pem
-          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
+      # - name: Add SSH Key
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
+      #     echo "${{ secrets.AZURE_SSH_PUBLIC_KEY }}" > /scripts/devazure.pem.pub
+      #     chmod 400 ~/.ssh/devazure.pem
+      #     echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
 
       - name: Check SSH Key Format
         run: |
