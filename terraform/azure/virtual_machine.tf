@@ -30,10 +30,10 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
   #   public_key = azapi_resource_action.ssh_public_key_gen.output.publicKey
   # }
 
-  admin_ssh_key {
-    username   = var.username
-    public_key = file("./scripts/devazure.pem.pub")
-  }
+  # admin_ssh_key {
+  #   username   = var.username
+  #   public_key = file("./scripts/devazure.pem.pub")
+  # }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.my_storage_account.primary_blob_endpoint
