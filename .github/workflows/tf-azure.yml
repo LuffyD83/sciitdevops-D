@@ -103,7 +103,7 @@ jobs:
       - name: Check SSH Key Format
         run: |
             sudo apt-get install libssl-dev
-            cat ./devazure.pem
+            cat ~/.ssh/devazure.pem
             ssh-keygen -l -f ./devazure.pem || echo "Invalid SSH key!"
       # # Test SSH connection
       # - name: Test SSH connection
