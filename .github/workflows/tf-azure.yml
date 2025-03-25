@@ -118,7 +118,7 @@ jobs:
  
       - name: Test SSH connection
         run: |
-              INSTANCE_IP=$(terraform output -json public_ip_address | jq -r '.[0]')
+              INSTANCE_IP=$(terraform output -json public_ip_address | jq -r 'if type == "string" then . else .[0] end')
               ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/devazure.pem devadmin@$INSTANCE_IP 'echo Hello from GitHub Actions'
                 
       #ssh-keygen -l -f ~/.ssh/devazure.pem || echo "Invalid SSH key!"
