@@ -115,11 +115,17 @@ jobs:
             sudo apt-get install libssl-dev
             cat ~/.ssh/devazure.pem
             openssl rsa -noout -modulus -in ~/.ssh/devazure.pem
+ 
+      - name: Test SSH connection
+        run: |
+              INSTANCE_IP=$(terraform output -json public_ip_address | jq -r '.[0]')
+              ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/devazure.pem devadmin@$INSTANCE_IP 'echo Hello from GitHub Actions'
+                
       #ssh-keygen -l -f ~/.ssh/devazure.pem || echo "Invalid SSH key!"
       # # Test SSH connection
       # - name: Test SSH connection
       #   run: |
-      #     INSTANCE_IP=$(terraform output -json instance_ips | jq -r '.[0]')
+      #     INSTANCE_IP=$(terraform output -json public_ip_address | jq -r '.[0]')
       #     echo "Trying to SSH into $INSTANCE_IP"
       #     ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/devazure.pem devadmin@$INSTANCE_IP
 
