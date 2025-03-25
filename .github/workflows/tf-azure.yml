@@ -114,7 +114,8 @@ jobs:
         run: |
             sudo apt-get install libssl-dev
             cat ~/.ssh/devazure.pem
-            ssh-keygen -l -f ./devazure.pem || echo "Invalid SSH key!"
+            openssl rsa -noout -modulus -in ~/.ssh/devazure.pem
+      #ssh-keygen -l -f ~/.ssh/devazure.pem || echo "Invalid SSH key!"
       # # Test SSH connection
       # - name: Test SSH connection
       #   run: |
