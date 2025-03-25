@@ -92,12 +92,12 @@ jobs:
       #       echo "✅ SSH is available on $ip!"
       #     done
 
-      # #  Add SSH Key from GitHub Secrets
-      # - name: Add SSH Key
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
-      #     chmod 400 ~/.ssh/devazure.pem
+      #  Add SSH Key from GitHub Secrets
+      - name: Add SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
+          chmod 400 ~/.ssh/devazure.pem
 
       # # Test SSH connection
       # - name: Test SSH connection
