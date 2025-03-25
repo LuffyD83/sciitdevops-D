@@ -98,7 +98,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" > ~/.ssh/devazure.pem
           chmod 400 ~/.ssh/devazure.pem
+          echo "${{ secrets.AZURE_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
 
+      - name: Check SSH Key Format
+        run: |
+            sudo apt-get install libssl-dev
+            cat ./devazure.pem
+            ssh-keygen -l -f ./devazure.pem || echo "Invalid SSH key!"
       # # Test SSH connection
       # - name: Test SSH connection
       #   run: |
