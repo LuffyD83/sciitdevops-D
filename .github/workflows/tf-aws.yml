@@ -29,23 +29,20 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
-
+      
+      - name: Add SSH Key
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/devops.pem
+            chmod 400 ~/.ssh/devops.pem
+      
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
-      # # Save instance IPs and create inventory file for Ansible
-      # - name: Save instance IPs and create inventory
-      #   run: |
-      #     INSTANCE_IPS=$(terraform output -json k3s_vm_public_ip)
-      #     echo "$INSTANCE_IPS" | jq -r '.[]' > ansible/instance-ips.txt
-      #     echo "[servers]" > ansible/inventory.ini
-      #     while IFS= read -r ip; do
-      #       echo "$ip ansible_user=ubuntu ansible_ssh_private_key_file=./scripts/devops.pem" >> ansible/inventory.ini
-      #     done < ansible/instance-ips.txt
-
+    
 # Save instance IPs and create inventory file for Ansible
       - name: Save instance IPs and create inventory
         run: |
@@ -79,11 +76,7 @@ jobs:
           done
 
       #  Add SSH Key from GitHub Secrets
-      - name: Add SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/devops.pem
-          chmod 400 ~/.ssh/devops.pem
+     
 
       # Test SSH connection
       # - name: Test SSH connection
