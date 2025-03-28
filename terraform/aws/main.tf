@@ -13,7 +13,7 @@ resource "aws_internet_gateway" "net-igw" {
 
 resource "aws_instance" "k3s" {
   ami                    = data.aws_ami.ubuntu.id # Ubuntu AMI
-  instance_type          = "t3.medium"
+  instance_type          = "t3a.medium"
   availability_zone      = var.public_subnet_az
   subnet_id              = aws_subnet.public-subnet.id
   vpc_security_group_ids = [aws_security_group.sg.id]
@@ -64,28 +64,28 @@ resource "aws_instance" "k3s" {
 }
 
 
-# resource "aws_instance" "web" {
-#   ami                    = data.aws_ami.ubuntu.id # Ubuntu AMI
-#   instance_type          = "t2.micro"
-#   availability_zone      = var.public_subnet_az
-#   subnet_id              = aws_subnet.public-subnet.id
-#   vpc_security_group_ids = [aws_security_group.sg.id]
-#   key_name               = data.aws_key_pair.public_key.key_name
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.ubuntu.id # Ubuntu AMI
+  instance_type          = "t2.micro"
+  availability_zone      = var.public_subnet_az
+  subnet_id              = aws_subnet.public-subnet.id
+  vpc_security_group_ids = [aws_security_group.sg.id]
+  key_name               = data.aws_key_pair.public_key.key_name
   
   
   
-#     tags = merge(local.common_tags, { Name = "Web-VM" })
+    tags = merge(local.common_tags, { Name = "Web-VM" })
 
-#   #user_data = file("python_web_server.sh")
-#   # Use the remote-exec provisioner to run the setup script
-#   # provisioner "file" {
-#   #   source      = "python_web_server.sh"
-#   #   destination = "/home/ec2-user/python_web_server.sh"
+  #user_data = file("python_web_server.sh")
+  # Use the remote-exec provisioner to run the setup script
+  # provisioner "file" {
+  #   source      = "python_web_server.sh"
+  #   destination = "/home/ec2-user/python_web_server.sh"
 
-#   #}
-#   # provisioner "local-exec" {
-#   #   command = "sleep 90 && ansible_host_key_checking=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devops.pem ./scripts/install_k3s.yml -vv"
-#   # }
+  #}
+  # provisioner "local-exec" {
+  #   command = "sleep 90 && ansible_host_key_checking=false ansible-playbook -i ${self.public_ip}, -u ubuntu --private-key=./scripts/devops.pem ./scripts/install_k3s.yml -vv"
+  # }
 
 # provisioner "local-exec" {
 #   command = <<EOT
@@ -95,5 +95,5 @@ resource "aws_instance" "k3s" {
 #   EOT
 # }
   
-# }
+}
 
