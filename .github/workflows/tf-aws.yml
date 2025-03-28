@@ -97,7 +97,7 @@ jobs:
           INSTANCE_IP=$(terraform output -json k3s_vm_public_ip | jq -r 'if type == "string" then . else .[0] end')
 
           echo "Trying to SSH into $INSTANCE_IP"
-          ssh -vvv -o StrictHostKeyChecking=no -i ./devops.pem ubuntu@$INSTANCE_IP
+          ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/devops.pem ubuntu@$INSTANCE_IP
 
       # Install Ansible
       - name: Install Ansible
