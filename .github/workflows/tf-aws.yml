@@ -34,7 +34,7 @@ jobs:
           sudo /tmp/aws/install --update
           rm -rf /tmp/aws/
           export AWS_REGION=us-east-1  # Change this to your desired region
-          aws ssm get-parameter --name "ssh_key" --query "Parameter.Value" --output text --region $AWS_REGION >> aws.pem
+          aws ssm get-parameter --name "ssh_key" --query "Parameter.Value" --output text --region $AWS_REGION >> devops.pem
 
 
       #  Add SSH Key from GitHub Secrets
@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
-          chmod 600 ./aws.pem
+          chmod 600 ./devops.pem
 
       # Terraform Setup
       - name: Setup Terraform
@@ -71,7 +71,7 @@ jobs:
 
           # Create inventory.ini
           echo "[servers]" > inventory.ini
-          echo "$IP_LIST ansible_user=ubuntu ansible_ssh_private_key_file=./aws.pem" >> inventory.ini
+          echo "$IP_LIST ansible_user=ubuntu ansible_ssh_private_key_file=./devops.pem" >> inventory.ini
 
 
       # Wait for SSH to be available
@@ -95,30 +95,30 @@ jobs:
       # Test SSH connection
       - name: Check SSH Key
         run: |
-          if [ ! -f ./aws.pem ]; then
+          if [ ! -f ./devops.pem ]; then
             echo "ERROR: SSH key not found!"
             exit 1
           fi
-          ls -l ./aws.pem
+          ls -l ./devops.pem
 
       - name: Set correct permissions for SSH key
-        run: chmod 600 ./aws.pem
+        run: chmod 600 ./devops.pem
 
       - name: Check SSH Key Format
         run: |
           sudo apt-get install libssl-dev
-          cat ./aws.pem
-          ssh-keygen -l -f ./aws.pem || echo "Invalid SSH key!"
+          cat ./devops.pem
+          ssh-keygen -l -f ./devops.pem || echo "Invalid SSH key!"
 
       - name: Convert SSH key to RSA format
-        run: ssh-keygen -p -m PEM -f ./aws.pem -o -P "" -N ""
+        run: ssh-keygen -p -m PEM -f ./devops.pem -o -P "" -N ""
 
       - name: Test SSH connection
         run: |
           INSTANCE_IP=$(terraform output -json k3s_vm_public_ip | jq -r 'if type == "string" then . else .[0] end')
 
           echo "Trying to SSH into $INSTANCE_IP"
-          ssh -vvv -o StrictHostKeyChecking=no -i ./aws.pem ubuntu@$INSTANCE_IP
+          ssh -vvv -o StrictHostKeyChecking=no -i ./devops.pem ubuntu@$INSTANCE_IP
 
 
       # Install Ansiblegit 
