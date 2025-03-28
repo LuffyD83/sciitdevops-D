@@ -129,7 +129,7 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           cat -A inventory.ini
-          ansible-playbook -i inventory.ini install_k3s.yml -vvv
+          ansible-playbook -i inventory.ini ./scripts/install_k3s.yml -vvv
 
 
 
