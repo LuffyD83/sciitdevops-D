@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" >> ~/.ssh/authorized_keys
-          chmod 600 ./devops.pem
+          chmod 400 ./devops.pem
 
       # Terraform Setup
       - name: Setup Terraform
@@ -102,7 +102,7 @@ jobs:
           ls -l ./devops.pem
 
       - name: Set correct permissions for SSH key
-        run: chmod 600 ./devops.pem
+        run: chmod 400 ./devops.pem
 
       - name: Check SSH Key Format
         run: |
