@@ -114,11 +114,11 @@ resource "azurerm_linux_virtual_machine" "my_vm" {
     storage_account_uri = azurerm_storage_account.my_storage_account.primary_blob_endpoint
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
+  # provisioner "local-exec" {
+  #   command = <<EOT
 
-  EOT
-  }
+  # EOT
+  # }
 }
 
 
