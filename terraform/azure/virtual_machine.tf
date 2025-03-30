@@ -78,7 +78,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
+resource "azurerm_linux_virtual_machine" "my_vm" {
   name                  = "WebVM"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
@@ -107,7 +107,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
   admin_ssh_key {
     username   = var.username
-    public_key = file(".scripts/azure.pem.pub")
+    public_key = file("./scripts/azure.pem.pub")
   }
   
   boot_diagnostics {
