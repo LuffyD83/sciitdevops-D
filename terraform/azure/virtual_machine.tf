@@ -87,7 +87,7 @@ resource "azurerm_linux_virtual_machine" "my_vm" {
   admin_username        = var.username
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = "myOsDisk_Web"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
