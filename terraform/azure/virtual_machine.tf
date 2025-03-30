@@ -107,7 +107,7 @@ resource "azurerm_linux_virtual_machine" "my_vm" {
 
   admin_ssh_key {
     username   = var.username
-    public_key = file("./scripts/azure.pem.pub")
+    public_key = file("./scripts/devazure.pem.pub")
   }
   
   boot_diagnostics {
